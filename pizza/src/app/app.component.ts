@@ -7,4 +7,9 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'pizza';
+  loggedIn = false;
+  
+  logIn(flag: boolean) {
+    this.loggedIn = flag;
+  }
 }

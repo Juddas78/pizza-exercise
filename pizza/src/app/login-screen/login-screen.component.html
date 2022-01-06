@@ -1,0 +1,13 @@
+<div id="login-screen"><p>Please login to continue.</p>
+
+<form [formGroup]="loginInfo" (submit)="onSubmit()">
+    <label for="username">Username:</label>
+    <input id="username" type="text" formControlName="username" placeholder="Username" matInput required>
+
+    <label for="password">Password:</label>
+    <input id="password" type="password" formControlName="password" placeholder="Password" matInput required>
+
+    <button type="submit" [disabled]="!loginInfo.valid">Submit</button>
+</form>
+
+</div>
