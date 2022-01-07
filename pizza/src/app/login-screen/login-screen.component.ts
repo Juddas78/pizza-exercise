@@ -30,6 +30,7 @@ export class LoginScreenComponent implements OnInit {
   
   loginSuccess(res: any) {
     console.log(res);
+    this.http.authToken = res.access_token;
     this.isLoggedIn.emit(true);
   }
 

@@ -1,4 +1,10 @@
 <div class="main">
   <login-screen *ngIf="!loggedIn" #login (isLoggedIn)="logIn($event)"></login-screen>
-  <order-screen *ngIf="loggedIn"></order-screen>
+  
+  <div class="dashboard" *ngIf="loggedIn">
+    <order-screen *ngIf="orderDashboard"></order-screen>
+    <app-new-order *ngIf="newOrder"></app-new-order>
+    <button (click)="viewDashboard()">View current orders?</button>
+    <button (click)="createNewOrder()">Place New Order</button>
+  </div>
 </div>

@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import {MatInputModule} from '@angular/material/input';
+import {MatRadioModule} from '@angular/material/radio';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -11,12 +12,16 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { OrderScreenComponent } from './order-screen/order-screen.component';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { PizzaComponent } from './pizza/pizza.component';
+import { NewOrderComponent } from './new-order/new-order.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginScreenComponent,
-    OrderScreenComponent
+    OrderScreenComponent,
+    PizzaComponent,
+    NewOrderComponent
   ],
   imports: [
     BrowserModule,
@@ -26,6 +31,7 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
     FormsModule,
     ReactiveFormsModule,
     MatFormFieldModule,
+    MatRadioModule,
     HttpClientModule
   ],
   providers: [HttpClient],
