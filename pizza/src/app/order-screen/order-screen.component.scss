@@ -1,0 +1,43 @@
+.orders-container {
+    border: 1px solid black;
+    padding: 10px;
+    display: flex;
+    justify-content: center;
+    margin-top: 100px;
+}
+
+.new-order {
+    margin: auto;
+    display: block;
+    text-align: center;
+    width: 100%;
+}
+
+.confirmed {
+    background-color: rgba($color: #009420, $alpha: 0.5);
+    color: white;
+    font-size: 20px;
+    font-weight: bold;
+    text-align: center;
+    padding: 10px;
+}
+
+.deleted {
+    background-color: rgba($color: red, $alpha: 0.5);
+    color: white;
+    font-size: 20px;
+    font-weight: bold;
+    text-align: center;
+    padding: 10px;
+}
+
+.new-order-button {
+    margin: 20px;
+    background-color: rgba($color: royalblue, $alpha: 0.5);
+    border: 3px solid black;
+    border-radius: 10px;
+    min-height: 25px;
+    color: white;
+    font-size: 20px;
+    font-weight: bold;
+}

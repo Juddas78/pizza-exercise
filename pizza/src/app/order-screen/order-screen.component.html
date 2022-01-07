@@ -1,1 +1,11 @@
-<app-pizza  *ngFor="let pizza of pizzaList;" [pizzaDetails]="pizza"></app-pizza>
+<div class="orders-container">
+    <app-pizza  *ngFor="let pizza of pizzaList;" [pizzaDetails]="pizza" (deletePizza)="deletePizza($event)"></app-pizza>
+
+</div>
+
+<div class="confirmed" *ngIf="orderConfirmed">We have recieved your order. Thank you!</div>
+<div class="deleted" *ngIf="deleted">We have deleted the order.</div>
+<div  class="new-order">
+    <button class="new-order-button" (click)="createNewOrder()">Place New Order</button>
+    <app-new-order *ngIf="newOrder" (orderPlaced)="orderPlaced()"></app-new-order>
+</div>

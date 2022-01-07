@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
 import { crusts, sizes, toppings } from '../pizza/pizza.component';
 import { PizzaOrderService } from '../services/pizza-order.service';
@@ -14,6 +14,10 @@ export class NewOrderComponent implements OnInit {
   sizes = sizes;
   toppings = toppings;
 
+  @Output() orderPlaced = new EventEmitter<boolean>();
+  selectedToppings: string[] = [];
+
+
   constructor(private readonly http: PizzaOrderService) { }
   ngOnInit(): void {
   }
@@ -21,7 +25,7 @@ export class NewOrderComponent implements OnInit {
   placeOrder() {
     let details = this.orderInfo.value;
     console.log(details);
-    this.http.placeOrder(details.crust, details.flavor, details.size, details.table).subscribe({
+    this.http.placeOrder(details.crust, this.selectedToppings.toString(), details.size, details.table).subscribe({
       next: (res) =>  this.orderSuccess(res),
       error: (err) =>  this.orderFailure(err)
     })
@@ -31,7 +35,13 @@ export class NewOrderComponent implements OnInit {
     throw new Error('Method not implemented.');
   }
   orderSuccess(res: any) {
+    this.orderPlaced.emit(true);
     console.log('order placed successfully', res);
+  }
+
+  addTopping(topping: any) {
+    this.selectedToppings.push(topping);
+    console.log('added topping', topping, this.selectedToppings.toString());
   }
 
   orderInfo = new FormGroup({

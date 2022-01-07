@@ -58,8 +58,18 @@ export class PizzaOrderService {
     }
     console.log('making the request with:', options);
     return this.http.post('/api/orders', body, options);
+  }
 
-    // return this.http.post('/api/orders', options);
+  deletePizza(orderID: number) {
+    let headers = new HttpHeaders();
+    headers = headers.append('Content-Type', 'application/json');
+    headers = headers.append('Access-Control-Expose-Headers', 'Authorization');
+    headers = headers.append('Authorization', `Bearer ${this.authToken}`);
+    const options = {
+      headers: headers,
+      access_token: this.authToken
+    }
+    return this.http.delete(`/api/orders/${orderID}`, options);
   }
 
 }

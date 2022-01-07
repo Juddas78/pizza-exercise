@@ -1,26 +1,37 @@
-<h2>Place new order!</h2>
+<div class="new-order-container">
+  <h2>Place new order!</h2>
 
-<form [formGroup]="orderInfo" (submit)="placeOrder()">
-  <h2>Crust:</h2>
-  <div class="button-group" *ngFor="let crust of crusts" >
-    <label for="crust">{{crust}}</label>
-      <input type="radio" [value]="crust" [formControlName]="'crust'" required /> 
-  </div>
+  <form [formGroup]="orderInfo" (submit)="placeOrder()">
+    <div class="section">
+      <h2>Crust: </h2>
+      <div class="button-group" *ngFor="let crust of crusts">
+        <label for="crust">{{crust}}</label>
+        <input type="radio" [value]="crust" [formControlName]="'crust'" required />
+      </div>
+    </div>
 
-  <h2>Size:</h2>
-  <div class="button-group" *ngFor="let size of sizes" >
+    <div class="section">
 
-    <label for="size">{{size}}</label>
-      <input type="radio" [value]="size" [formControlName]="'size'" required />
-  </div>
+      <h2>Size: </h2>
+      <div class="button-group" *ngFor="let size of sizes">
 
-  <h2>Topping:</h2>
-  <div class="button-group" *ngFor="let topping of toppings">
-    <label for="topping">{{topping}}</label><input type="radio"  [value]="topping" [formControlName]="'flavor'" required />
-  </div>
+        <label for="size">{{size}}</label>
+        <input type="radio" [value]="size" [formControlName]="'size'" required />
+      </div>
+    </div>
+    <div class="section">
 
-  <h2>Table Number:</h2>
+      <h2>Topping: </h2>
+      <div class="button-group" *ngFor="let topping of toppings">
+        <label for="topping">{{topping}}</label><input type="checkbox" name="topping" [value]="topping"
+          [formControlName]="'flavor'" (change)="addTopping(topping)" required />
+      </div>
+    </div>
+    <div class="section">
+
+      <h2>Table Number: </h2>
       <input type="number" [formControlName]="'table'" required />
-
-  <button type="submit" [disabled]="!orderInfo.valid">Submit</button>
-</form>
+    </div>
+    <button type="submit" [disabled]="!orderInfo.valid">Submit</button>
+  </form>
+</div>
