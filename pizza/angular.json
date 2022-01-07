@@ -71,6 +71,11 @@
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
+            "options": {
+              "browserTarget": "pizza:build",
+              "proxyConfig": "src/proxy.conf.json"
+            },
+
           "configurations": {
             "production": {
               "browserTarget": "pizza:build:production"

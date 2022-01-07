@@ -1,5 +1,7 @@
+import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
+import { PizzaOrderService } from '../services/pizza-order.service';
 
 
 @Component({
@@ -9,7 +11,7 @@ import { FormControl, FormGroup } from '@angular/forms';
 })
 export class LoginScreenComponent implements OnInit {
 
-  constructor() { }
+  constructor(private readonly http: PizzaOrderService) { }
   @Output() isLoggedIn = new EventEmitter<boolean>();
 
 
@@ -18,8 +20,21 @@ export class LoginScreenComponent implements OnInit {
 
   onSubmit() {
     const details = this.loginInfo.value;
-    this.isLoggedIn.emit(true);
     console.log('submitted with details!', details);
+    this.http.authorize(details.username, details.password).subscribe({
+      next: (res) => this.loginSuccess(res),
+      error: (err: HttpErrorResponse) => this.loginFailure(err)
+    })
+
+  }
+  
+  loginSuccess(res: any) {
+    console.log(res);
+    this.isLoggedIn.emit(true);
+  }
+
+  loginFailure(err: any) {
+    console.error(err);
   }
   
   
