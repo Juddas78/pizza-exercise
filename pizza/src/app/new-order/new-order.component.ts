@@ -25,7 +25,6 @@ export class NewOrderComponent implements OnInit {
 
   placeOrder() {
     let details = this.orderInfo.value;
-    console.log(details);
     this.http.placeOrder(details.crust, this.selectedToppings.toString(), details.size, details.table).subscribe({
       next: () =>  this.orderSuccess(),
       error: (err: HttpErrorResponse) =>  this.orderFailure(err)

@@ -1,3 +1,4 @@
+import { HttpErrorResponse, HttpHeaders, HttpEventType } from '@angular/common/http';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { Order } from '../pizza/pizza.component';
@@ -42,7 +43,29 @@ describe('PizzaOrderService', () => {
       req.flush(mockAccessResponse);
     });
 
-    it('should return 401 with invalid creds', () => {
+    it('should deny access with invalid', () => {
+      const mockErrorResponse: HttpErrorResponse = {
+        name: 'HttpErrorResponse',
+        message: 'UNAUTHORIZED',
+        error: undefined,
+        ok: false,
+        headers: new HttpHeaders,
+        status: 401,
+        statusText: '',
+        url: null,
+        type: HttpEventType.ResponseHeader
+      }
+
+      service.authorize('user', 'password').subscribe({
+        next: (res: AuthResponse) => {},
+        error: (err: HttpErrorResponse) => {
+          expect(err.message).toEqual('UNAUTHORIZED');
+          expect(err.status).toEqual(401);
+      }})
+      const req = httpTestingController.expectOne('/api/auth');
+      expect(req.request.method).toEqual('POST');
+
+      req.flush(mockErrorResponse);
 
     });
   })
