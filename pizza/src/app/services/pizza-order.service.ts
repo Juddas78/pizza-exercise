@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError, retry, windowTime } from 'rxjs/operators';
+import { Order } from '../pizza/pizza.component';
 
 
 @Injectable({
@@ -13,7 +14,7 @@ export class PizzaOrderService {
 
   totalOrders = 0;
   authToken = '';
-  authorize(username: string, password: string){
+  authorize(username: string, password: string): Observable<AuthResponse>{
 
     let headers = new HttpHeaders();
     headers.append('Content-Type', 'application/json');
@@ -24,20 +25,23 @@ export class PizzaOrderService {
       password: password,
       responseType: 'json'
     }
-    console.log('making the request with:', options);
-    return this.http.post('/api/auth', options);
+    return this.http.post<AuthResponse>('/api/auth', options);
   }
 
-  getOrders() {
+  setAuthToken(token: string) {
+    this.authToken = token;
+  }
+
+  getOrders(): Observable<Order[]> {
     let headers = new HttpHeaders();
     headers.append('Content-Type', 'application/json');
     const options = {
       headers: headers,
     }
-    return this.http.get('/api/orders', options);
+    return this.http.get<Order[]>('/api/orders', options);
   }
 
-  placeOrder(crust: string, flavor: string, size: string, table_no: number) {
+  placeOrder(crust: string, flavor: string, size: string, table_no: number): Observable<Order> {
     let headers = new HttpHeaders();
     headers = headers.append('Content-Type', 'application/json');
     headers = headers.append('Access-Control-Expose-Headers', 'Authorization');
@@ -56,11 +60,10 @@ export class PizzaOrderService {
       headers: headers,
       access_token: this.authToken
     }
-    console.log('making the request with:', options);
-    return this.http.post('/api/orders', body, options);
+    return this.http.post<Order>('/api/orders', body, options);
   }
 
-  deletePizza(orderID: number) {
+  deletePizza(orderID: number): Observable<{message: string}> {
     let headers = new HttpHeaders();
     headers = headers.append('Content-Type', 'application/json');
     headers = headers.append('Access-Control-Expose-Headers', 'Authorization');
@@ -69,7 +72,10 @@ export class PizzaOrderService {
       headers: headers,
       access_token: this.authToken
     }
-    return this.http.delete(`/api/orders/${orderID}`, options);
+    return this.http.delete<{message: string}>(`/api/orders/${orderID}`, options);
   }
+}
 
+export interface AuthResponse {
+  access_token: string;
 }

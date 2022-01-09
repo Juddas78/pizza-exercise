@@ -11,3 +11,14 @@
     margin: auto;
     margin-bottom: 8px;;
 }
+
+.error {
+    background-color: rgba($color: red, $alpha: 0.5);
+    margin-top: 15px;
+    color: white;
+    font-size: 15px;
+    font-weight: bold;
+    text-align: center;
+    padding: 10px;
+    border-radius: 10px;
+}

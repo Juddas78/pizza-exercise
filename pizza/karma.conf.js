@@ -5,6 +5,13 @@ module.exports = function (config) {
   config.set({
     basePath: '',
     frameworks: ['jasmine', '@angular-devkit/build-angular'],
+    preprocessors: {
+      '**/src/app/*.js': ['coverage']
+    },
+    files: [
+      'src/app/**/*.js',
+      'src/spec/**/*.specs.js'
+  ],
     plugins: [
       require('karma-jasmine'),
       require('karma-chrome-launcher'),
@@ -26,20 +33,21 @@ module.exports = function (config) {
       suppressAll: true // removes the duplicated traces
     },
     coverageReporter: {
-      dir: require('path').join(__dirname, './coverage/pizza'),
+      dir: 'coverage/',
       subdir: '.',
       reporters: [
         { type: 'html' },
         { type: 'text-summary' }
       ]
     },
-    reporters: ['progress', 'kjhtml'],
+    reporters: ['progress', 'kjhtml', 'coverage'],
     port: 9876,
     colors: true,
-    logLevel: config.LOG_INFO,
+    logLevel: config.LOG_DEBUG,
     autoWatch: true,
     browsers: ['Edge'],
     singleRun: false,
-    restartOnFileChange: true
+    restartOnFileChange: false,
+    browserSocketTimeout: 60000,
   });
 };

@@ -1,6 +1,7 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
-import { crusts, sizes, toppings } from '../pizza/pizza.component';
+import { crusts, Order, sizes, toppings } from '../pizza/pizza.component';
 import { PizzaOrderService } from '../services/pizza-order.service';
 
 @Component({
@@ -26,17 +27,16 @@ export class NewOrderComponent implements OnInit {
     let details = this.orderInfo.value;
     console.log(details);
     this.http.placeOrder(details.crust, this.selectedToppings.toString(), details.size, details.table).subscribe({
-      next: (res) =>  this.orderSuccess(res),
-      error: (err) =>  this.orderFailure(err)
+      next: () =>  this.orderSuccess(),
+      error: (err: HttpErrorResponse) =>  this.orderFailure(err)
     })
   }
 
-  orderFailure(err: any): void {
+  orderFailure(err: HttpErrorResponse): void {
     throw new Error('Method not implemented.');
   }
-  orderSuccess(res: any) {
+  orderSuccess() {
     this.orderPlaced.emit(true);
-    console.log('order placed successfully', res);
   }
 
   addTopping(topping: any) {

@@ -1,7 +1,7 @@
 import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import { PizzaOrderService } from '../services/pizza-order.service';
+import { AuthResponse, PizzaOrderService } from '../services/pizza-order.service';
 
 
 @Component({
@@ -10,6 +10,7 @@ import { PizzaOrderService } from '../services/pizza-order.service';
   styleUrls: ['./login-screen.component.scss']
 })
 export class LoginScreenComponent implements OnInit {
+  loginError: boolean = false;
 
   constructor(private readonly http: PizzaOrderService) { }
   @Output() isLoggedIn = new EventEmitter<boolean>();
@@ -20,22 +21,26 @@ export class LoginScreenComponent implements OnInit {
 
   onSubmit() {
     const details = this.loginInfo.value;
+    this.loginError = false;
     console.log('submitted with details!', details);
     this.http.authorize(details.username, details.password).subscribe({
-      next: (res) => this.loginSuccess(res),
+      next: (res: AuthResponse) => this.loginSuccess(res),
       error: (err: HttpErrorResponse) => this.loginFailure(err)
     })
 
   }
   
-  loginSuccess(res: any) {
+  loginSuccess(res: AuthResponse) {
     console.log(res);
-    this.http.authToken = res.access_token;
+    this.http.setAuthToken(res.access_token);
     this.isLoggedIn.emit(true);
   }
 
-  loginFailure(err: any) {
-    console.error(err);
+  loginFailure(err: HttpErrorResponse) {
+    console.error(err.error);
+    this.loginError = true;
+    this.loginInfo.reset();
+
   }
   
   

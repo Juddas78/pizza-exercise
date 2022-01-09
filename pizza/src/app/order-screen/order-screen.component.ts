@@ -1,5 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { Order } from '../pizza/pizza.component';
 import { PizzaOrderService } from '../services/pizza-order.service';
 
 @Component({
@@ -12,7 +13,7 @@ export class OrderScreenComponent implements OnInit {
 
   constructor(private readonly http: PizzaOrderService) { }
 
-  pizzaList: any;
+  pizzaList: Order[] = [];
   newOrder = false;
   deleted = false;
 
@@ -34,7 +35,7 @@ export class OrderScreenComponent implements OnInit {
     this.orderConfirmed = true;
   }
 
-  ordersResponseSuccess(res: any) {
+  ordersResponseSuccess(res: Order[]) {
     console.log('here are the orders', res);
     this.pizzaList = res;
     this.http.totalOrders = res.length;
@@ -50,6 +51,7 @@ export class OrderScreenComponent implements OnInit {
       error: (err: HttpErrorResponse) => this.ordersResponseFailure(err)
     })
   }
+  
   deleteSuccess(res: Object): void {
     this.getOrders();
     console.log(res);

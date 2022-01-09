@@ -14,4 +14,6 @@
     <button type="submit" [disabled]="!loginInfo.valid">Submit</button>
 </form>
 
+
 </div>
+<div *ngIf="loginError" class="error">Login Failed! Please try again.</div>
