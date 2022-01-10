@@ -24,7 +24,7 @@
       <h2>Topping: </h2>
       <div class="button-group" *ngFor="let topping of toppings">
         <label for="topping">{{topping}}</label><input type="checkbox" name="topping" [value]="topping"
-          [formControlName]="'flavor'" (change)="addTopping(topping)" required />
+          (change)="addTopping(topping)" required />
       </div>
     </div>
     <div class="section">

@@ -45,7 +45,6 @@ export class NewOrderComponent implements OnInit {
 
   orderInfo = new FormGroup({
     crust: new FormControl(''),
-    flavor: new FormControl(''),
     size: new FormControl(''),
     table: new FormControl(''),
   });
