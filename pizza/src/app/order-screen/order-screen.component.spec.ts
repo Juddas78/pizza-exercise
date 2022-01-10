@@ -49,7 +49,7 @@ describe('OrderScreenComponent', () => {
       expect(ordersResponseSuccess).toHaveBeenCalledOnceWith(mockResponse);
     });
 
-    it('should call ordersResponseFailure on error response', ()=> {
+    it('should call errorHandler on error response', ()=> {
       const mockResponse: HttpErrorResponse = {
         name: 'HttpErrorResponse',
         message: 'generic error response',
@@ -61,10 +61,10 @@ describe('OrderScreenComponent', () => {
         url: null,
         type: HttpEventType.ResponseHeader
       };
-      const ordersFailureSpy = spyOn(component, 'ordersResponseFailure');
+      const ordersFailureSpy = spyOn(component, 'errorHandler');
       spyOn(mockPizzaService, 'getOrders').and.returnValue(throwError(() => mockResponse));    
       component.getOrders();
-      expect(ordersFailureSpy).toHaveBeenCalledOnceWith(mockResponse, 'getOrders');
+      expect(ordersFailureSpy).toHaveBeenCalledOnceWith('getOrders');
     });
   });
 
@@ -97,32 +97,27 @@ describe('OrderScreenComponent', () => {
     });
   });
 
-  describe('ordersResponseFailure', () => {
-    const mockResponse: HttpErrorResponse = {
-      name: 'HttpErrorResponse',
-      message: 'generic error response',
-      error: undefined,
-      ok: false,
-      headers: new HttpHeaders,
-      status: 500,
-      statusText: '',
-      url: null,
-      type: HttpEventType.ResponseHeader
-    };
+  describe('errorHandler', () => {
     it('should set error message for getOrders failure', () => {
-      component.ordersResponseFailure(mockResponse, 'getOrders');
+      component.errorHandler('getOrders');
       expect(component.pizzaList).toEqual([]);
       expect(component.errorMessage).toEqual('There was a problem getting the orders. Please try again.');
     });
 
     it('should set error message for deletePizza failure', () => {
-      component.ordersResponseFailure(mockResponse, 'deletePizza');
+      component.errorHandler('deletePizza');
       expect(component.pizzaList).toEqual([]);
       expect(component.errorMessage).toEqual('There was a problem deleting your order. Please try again.');
     });
 
+    it('should set error message for placeOrder failure', () => {
+      component.errorHandler('placeOrder');
+      expect(component.pizzaList).toEqual([]);
+      expect(component.errorMessage).toEqual('There was a problem placing your order. Please try again.');
+    });
+
     it('should set error to true', () => { 
-      component.ordersResponseFailure(mockResponse, '');
+      component.errorHandler('');
       expect(component.error).toBeTrue();
     });
   });
@@ -173,10 +168,10 @@ describe('OrderScreenComponent', () => {
         url: null,
         type: HttpEventType.ResponseHeader
       };
-      const ordersFailureSpy = spyOn(component, 'ordersResponseFailure');
+      const ordersFailureSpy = spyOn(component, 'errorHandler');
       spyOn(mockPizzaService, 'deletePizza').and.returnValue(throwError(() => mockResponse));    
       component.deletePizza(1);
-      expect(ordersFailureSpy).toHaveBeenCalledOnceWith(mockResponse, 'deletePizza');
+      expect(ordersFailureSpy).toHaveBeenCalledOnceWith('deletePizza');
     });
   });
 

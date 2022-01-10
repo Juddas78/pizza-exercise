@@ -28,7 +28,7 @@ export class OrderScreenComponent implements OnInit {
   getOrders() {
     this.http.getOrders().subscribe({
       next: (res) => this.ordersResponseSuccess(res),
-      error: (err: HttpErrorResponse) => this.ordersResponseFailure(err, 'getOrders')
+      error: () => this.errorHandler('getOrders')
     });
   }
 
@@ -41,6 +41,13 @@ export class OrderScreenComponent implements OnInit {
     this.clearBanner('confirmed');
   }
 
+  orderError() {
+    // this gets fired when order does not go through 
+    this.error = true;
+    this.errorHandler('placeOrder');
+    this.clearBanner('confirmed');
+  }
+
   ordersResponseSuccess(res: Order[]) {
     this.pizzaList = res;
     const orderIDs = res.map((value: Order) => {
@@ -49,19 +56,22 @@ export class OrderScreenComponent implements OnInit {
     this.http.setOrderID((orderIDs !== null && orderIDs.length !== 0)  ?  Math.max(...orderIDs) : 0);
   }
 
-  ordersResponseFailure(err: HttpErrorResponse, requestType: string) {
+  errorHandler(requestType: string) {
     if(requestType === 'deletePizza') {
       this.errorMessage = 'There was a problem deleting your order. Please try again.';
     } else if(requestType === 'getOrders') {
       this.errorMessage = 'There was a problem getting the orders. Please try again.';
+    } else if(requestType === 'placeOrder') {
+      this.errorMessage = 'There was a problem placing your order. Please try again.';
     }
+    
     this.error = true;
   }
 
   deletePizza(orderID: number) {
     this.http.deletePizza(orderID).subscribe({
       next: () => this.deleteSuccess(),
-      error: (err: HttpErrorResponse) => this.ordersResponseFailure(err, 'deletePizza')
+      error: (err: HttpErrorResponse) => this.errorHandler('deletePizza')
     })
   }
   

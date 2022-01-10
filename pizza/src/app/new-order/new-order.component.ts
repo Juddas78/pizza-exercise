@@ -16,6 +16,7 @@ export class NewOrderComponent implements OnInit {
   toppings = toppings;
 
   @Output() orderPlaced = new EventEmitter<boolean>();
+  @Output() orderError = new EventEmitter<boolean>();
   selectedToppings: string[] = [];
 
 
@@ -32,7 +33,8 @@ export class NewOrderComponent implements OnInit {
   }
 
   orderFailure(err: HttpErrorResponse): void {
-    throw new Error('Method not implemented.');
+    this.orderPlaced.emit(true);
+
   }
   orderSuccess() {
     this.orderPlaced.emit(true);
