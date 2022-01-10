@@ -152,10 +152,6 @@ describe('PizzaOrderService', () => {
 
       req.flush(mockOrderPlacedResponse);
     });
-
-    it('should return 401 with invalid creds', () => {
-
-    });
   });
 
   describe('deletePizza', () => {
@@ -171,10 +167,6 @@ describe('PizzaOrderService', () => {
       expect(req.request.method).toEqual('DELETE');
 
       req.flush(mockAccessResponse);
-    });
-
-    it('should return 401 with invalid creds', () => {
-
     });
   })
 
