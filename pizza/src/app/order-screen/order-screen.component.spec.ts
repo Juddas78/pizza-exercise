@@ -147,6 +147,23 @@ describe('OrderScreenComponent', () => {
     });
   });
 
+  describe('orderError', () => {
+    it('should call getOrders', () => {
+      spyOn(component, 'errorHandler');
+      component.orderError();
+      expect(component.errorHandler).toHaveBeenCalledOnceWith('placeOrder');
+    });
+    it('should set new order to true', () => {
+      component.orderError();
+      expect(component.error).toBeTrue();
+    });
+    it('should call orderError', () => {
+      spyOn(component, 'clearBanner');
+      component.orderError();
+      expect(component.clearBanner).toHaveBeenCalledOnceWith('confirmed');
+    });
+  });
+
   describe('deletePizza', () => {
     it('should call deleteSuccess on 200 response', ()=> {
       const mockResponse = {"message":"Order deleted"};
