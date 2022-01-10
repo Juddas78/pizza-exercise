@@ -22,25 +22,22 @@ export class LoginScreenComponent implements OnInit {
   onSubmit() {
     const details = this.loginInfo.value;
     this.loginError = false;
-    console.log('submitted with details!', details);
     this.http.authorize(details.username, details.password).subscribe({
       next: (res: AuthResponse) => this.loginSuccess(res),
-      error: (err: HttpErrorResponse) => this.loginFailure(err)
+      error: () => this.loginFailure()
     })
 
   }
   
   loginSuccess(res: AuthResponse) {
-    console.log(res);
+    this.loginError = false;
     this.http.setAuthToken(res.access_token);
     this.isLoggedIn.emit(true);
   }
 
-  loginFailure(err: HttpErrorResponse) {
-    console.error(err.error);
+  loginFailure() {
     this.loginError = true;
     this.loginInfo.reset();
-
   }
   
   
