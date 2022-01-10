@@ -19,20 +19,24 @@
 
 .confirmed {
     background-color: rgba($color: #009420, $alpha: 0.5);
+    border-radius: 10px;
     color: white;
     font-size: 20px;
     font-weight: bold;
     text-align: center;
     padding: 10px;
+    margin-top: 10px;
 }
 
 .deleted {
     background-color: rgba($color: red, $alpha: 0.5);
+    border-radius: 10px;
     color: white;
     font-size: 20px;
     font-weight: bold;
     text-align: center;
     padding: 10px;
+    margin-top: 10px;
 }
 
 .new-order-button {

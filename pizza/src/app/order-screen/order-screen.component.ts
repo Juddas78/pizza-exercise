@@ -33,10 +33,12 @@ export class OrderScreenComponent implements OnInit {
   }
 
   orderPlaced() {
+    // this gets fired when new order component successfully creates new order so we can reset and close
     this.getOrders();
     this.newOrder = false;
     this.orderConfirmed = true;
     this.error = false;
+    this.clearBanner('confirmed');
   }
 
   ordersResponseSuccess(res: Order[]) {
@@ -44,8 +46,7 @@ export class OrderScreenComponent implements OnInit {
     const orderIDs = res.map((value: Order) => {
       return value.Order_ID;
     })
-    console.log(orderIDs)
-    this.http.setOrderID(Math.max(...orderIDs));
+    this.http.setOrderID((orderIDs !== null && orderIDs.length !== 0)  ?  Math.max(...orderIDs) : 0);
   }
 
   ordersResponseFailure(err: HttpErrorResponse, requestType: string) {
@@ -67,6 +68,13 @@ export class OrderScreenComponent implements OnInit {
   deleteSuccess(): void {
     this.getOrders();
     this.deleted = true;
+    this.clearBanner('deleted')
+  }
+  
+  clearBanner(message: string){
+    setTimeout(() => {
+      message === 'deleted' ? this.deleted = false : this.orderConfirmed = false;
+    },7000)
   }
 
   createNewOrder() {

@@ -3,7 +3,7 @@
     <p>Flavor: <span >{{pizzaDetails.Flavor | titlecase }}</span></p>
     <p>Order: <span >{{pizzaDetails.Order_ID }}</span></p>    
     <p>Table: <span >{{pizzaDetails.Table_No}}</span></p>
-    <p class="size">Size: </p>
+    <p class="size">Size: <span >{{pizzaDetails.Size }}</span></p>
     <div [ngClass]="{'large': pizzaDetails.Size === 'L', 'medium': pizzaDetails.Size === 'M', 'small': pizzaDetails.Size === 'S'}"></div>
 
     <div class="x" (click)="delete()">Delete?</div>
