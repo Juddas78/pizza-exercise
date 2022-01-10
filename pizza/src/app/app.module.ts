@@ -16,6 +16,7 @@ import { PizzaComponent } from './pizza/pizza.component';
 import { NewOrderComponent } from './new-order/new-order.component';
 import { ErrorScreenComponent } from './error-screen/error-screen.component';
 import { LoadScreenComponent } from './load-screen/load-screen.component';
+import { TitleCasePipe } from '@angular/common';
 
 @NgModule({
   declarations: [
@@ -25,7 +26,7 @@ import { LoadScreenComponent } from './load-screen/load-screen.component';
     PizzaComponent,
     NewOrderComponent,
     ErrorScreenComponent,
-    LoadScreenComponent
+    LoadScreenComponent,
   ],
   imports: [
     BrowserModule,
@@ -38,7 +39,7 @@ import { LoadScreenComponent } from './load-screen/load-screen.component';
     MatRadioModule,
     HttpClientModule
   ],
-  providers: [HttpClient],
+  providers: [HttpClient, TitleCasePipe],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

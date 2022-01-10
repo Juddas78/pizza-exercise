@@ -6,6 +6,7 @@ import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { PizzaOrderService } from '../services/pizza-order.service';
 import { HttpClient, HttpErrorResponse, HttpEventType, HttpHeaders } from '@angular/common/http';
 import { of, throwError } from 'rxjs';
+import { TitleCasePipe } from '@angular/common';
 
 describe('NewOrderComponent', () => {
   let component: NewOrderComponent;
@@ -13,12 +14,14 @@ describe('NewOrderComponent', () => {
   
   let  mockPizzaService: PizzaOrderService;
   let formBuilder: FormBuilder;
-
+  const titlecasePipeStub = { transform: (item: string) => {
+    return item + ' TitleCased';
+  }}
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ NewOrderComponent ],
+      declarations: [ NewOrderComponent, TitleCasePipe],
       imports: [HttpClientTestingModule, ReactiveFormsModule],
-      providers: [{FormBuilder, useValue: formBuilder}, {PizzaOrderService, useValue: mockPizzaService} ],
+      providers: [{FormBuilder, useValue: formBuilder}, {PizzaOrderService, useValue: mockPizzaService}, {provide: TitleCasePipe, useValue: titlecasePipeStub}],
 
     })
     .compileComponents();
@@ -37,7 +40,7 @@ describe('NewOrderComponent', () => {
   });
 
   describe('placeOrder', () => {
-    it('makes the call with the correct values', () => {
+    it('makes the call with the correct value for single topping', () => {
       component.orderInfo = formBuilder.group({
         crust: 'normal',
         size: 'L',
@@ -53,7 +56,26 @@ describe('NewOrderComponent', () => {
         "Timestamp": "now"
       }));;
       component.placeOrder();
-      expect(spy).toHaveBeenCalledOnceWith('normal', 'pepperoni', 'L', 1);
+      expect(spy).toHaveBeenCalledOnceWith('normal', 'pepperoni TitleCased', 'L', 1);
+    });
+
+    it('makes the call with the correct values for multiple topping', () => {
+      component.orderInfo = formBuilder.group({
+        crust: 'normal',
+        size: 'L',
+        table: 1,
+      });
+      component.selectedToppings = ['pepperoni', 'mushrooms', 'pineapple'];
+      const spy = spyOn(mockPizzaService, 'placeOrder').and.returnValue(of({
+        "Crust": "normal",
+        "Flavor": "pepperoni",
+        "Order_ID": 1,
+        "Size": "L",
+        "Table_No": 1,
+        "Timestamp": "now"
+      }));;
+      component.placeOrder();
+      expect(spy).toHaveBeenCalledOnceWith('normal', 'pepperoni, mushrooms, pineapple TitleCased', 'L', 1);
     });
 
     it('should call orderFailure on error response', ()=> {

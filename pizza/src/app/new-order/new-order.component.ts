@@ -1,3 +1,4 @@
+import { TitleCasePipe } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
@@ -20,13 +21,14 @@ export class NewOrderComponent implements OnInit {
   selectedToppings: string[] = [];
 
 
-  constructor(private readonly http: PizzaOrderService) { }
+  constructor(private readonly http: PizzaOrderService,
+    private readonly titlecasePipe: TitleCasePipe) { }
   ngOnInit(): void {
   }
 
   placeOrder() {
     let details = this.orderInfo.value;
-    this.http.placeOrder(details.crust, this.selectedToppings.toString(), details.size, details.table).subscribe({
+    this.http.placeOrder(details.crust, this.titlecasePipe.transform(this.selectedToppings.join(', ')), details.size, details.table).subscribe({
       next: () =>  this.orderSuccess(),
       error: () =>  this.orderFailure()
     })
