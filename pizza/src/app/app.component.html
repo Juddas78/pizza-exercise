@@ -1,7 +1,5 @@
 <div class="main">
-  <login-screen *ngIf="!loggedIn" #login (isLoggedIn)="logIn($event)"></login-screen>
+  <login-screen class="login" *ngIf="!loggedIn" #login (isLoggedIn)="logIn($event)"></login-screen>
   
-  <div class="dashboard" *ngIf="loggedIn">
-    <order-screen ></order-screen>
-  </div>
+  <order-screen class="dashboard" *ngIf="loggedIn" ></order-screen>
 </div>

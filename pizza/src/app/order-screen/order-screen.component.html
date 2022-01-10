@@ -1,10 +1,12 @@
-<div class="orders-container">
+<div class="orders-container" *ngIf ="pizzaList">
     <app-pizza  *ngFor="let pizza of pizzaList;" [pizzaDetails]="pizza" (deletePizza)="deletePizza($event)"></app-pizza>
-
+    <app-error-screen *ngIf="(pizzaList.length === 0) && error"></app-error-screen>
+    <app-load-screen *ngIf="(pizzaList.length === 0) && !error"></app-load-screen>
 </div>
 
 <div class="confirmed" *ngIf="orderConfirmed">We have recieved your order. Thank you!</div>
 <div class="deleted" *ngIf="deleted">We have deleted the order.</div>
+<div class="order-error deleted" *ngIf="error">{{errorMessage}}</div>
 <div  class="new-order">
     <button class="new-order-button" (click)="createNewOrder()">Place New Order</button>
     <app-new-order *ngIf="newOrder" (orderPlaced)="orderPlaced()"></app-new-order>

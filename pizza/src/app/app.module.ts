@@ -14,6 +14,8 @@ import { OrderScreenComponent } from './order-screen/order-screen.component';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { PizzaComponent } from './pizza/pizza.component';
 import { NewOrderComponent } from './new-order/new-order.component';
+import { ErrorScreenComponent } from './error-screen/error-screen.component';
+import { LoadScreenComponent } from './load-screen/load-screen.component';
 
 @NgModule({
   declarations: [
@@ -21,7 +23,9 @@ import { NewOrderComponent } from './new-order/new-order.component';
     LoginScreenComponent,
     OrderScreenComponent,
     PizzaComponent,
-    NewOrderComponent
+    NewOrderComponent,
+    ErrorScreenComponent,
+    LoadScreenComponent
   ],
   imports: [
     BrowserModule,

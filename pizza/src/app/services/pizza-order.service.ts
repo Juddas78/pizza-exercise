@@ -12,7 +12,7 @@ export class PizzaOrderService {
 
   constructor(private readonly http: HttpClient) { }
 
-  totalOrders = 0;
+  orderID = 0;
   authToken = '';
   authorize(username: string, password: string): Observable<AuthResponse>{
 
@@ -30,6 +30,10 @@ export class PizzaOrderService {
 
   setAuthToken(token: string) {
     this.authToken = token;
+  }
+
+  setOrderID(currentID: number) {
+    this.orderID = currentID + 1;
   }
 
   getOrders(): Observable<Order[]> {
@@ -51,7 +55,7 @@ export class PizzaOrderService {
     const body = {
       Crust: crust,
       Flavor: flavor,
-      Order_ID: this.totalOrders + 1,
+      Order_ID: this.orderID,
       Size: size,
       Table_No: table_no,
       Timestamp: windowTime,

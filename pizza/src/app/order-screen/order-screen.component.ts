@@ -1,5 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { map } from 'rxjs';
 import { Order } from '../pizza/pizza.component';
 import { PizzaOrderService } from '../services/pizza-order.service';
 
@@ -10,6 +11,8 @@ import { PizzaOrderService } from '../services/pizza-order.service';
 })
 export class OrderScreenComponent implements OnInit {
   orderConfirmed = false;
+  error = false;
+  errorMessage = '';
 
   constructor(private readonly http: PizzaOrderService) { }
 
@@ -25,7 +28,7 @@ export class OrderScreenComponent implements OnInit {
   getOrders() {
     this.http.getOrders().subscribe({
       next: (res) => this.ordersResponseSuccess(res),
-      error: (err: HttpErrorResponse) => this.ordersResponseFailure(err)
+      error: (err: HttpErrorResponse) => this.ordersResponseFailure(err, 'getOrders')
     });
   }
 
@@ -33,37 +36,43 @@ export class OrderScreenComponent implements OnInit {
     this.getOrders();
     this.newOrder = false;
     this.orderConfirmed = true;
+    this.error = false;
   }
 
   ordersResponseSuccess(res: Order[]) {
-    console.log('here are the orders', res);
     this.pizzaList = res;
-    this.http.totalOrders = res.length;
+    const orderIDs = res.map((value: Order) => {
+      return value.Order_ID;
+    })
+    console.log(orderIDs)
+    this.http.setOrderID(Math.max(...orderIDs));
   }
 
-  ordersResponseFailure(err: HttpErrorResponse) {
-
+  ordersResponseFailure(err: HttpErrorResponse, requestType: string) {
+    if(requestType === 'deletePizza') {
+      this.errorMessage = 'There was a problem deleting your order. Please try again.';
+    } else if(requestType === 'getOrders') {
+      this.errorMessage = 'There was a problem getting the orders. Please try again.';
+    }
+    this.error = true;
   }
 
   deletePizza(orderID: number) {
     this.http.deletePizza(orderID).subscribe({
-      next: (res) => this.deleteSuccess(res),
-      error: (err: HttpErrorResponse) => this.ordersResponseFailure(err)
+      next: () => this.deleteSuccess(),
+      error: (err: HttpErrorResponse) => this.ordersResponseFailure(err, 'deletePizza')
     })
   }
   
-  deleteSuccess(res: Object): void {
+  deleteSuccess(): void {
     this.getOrders();
-    console.log(res);
     this.deleted = true;
   }
 
   createNewOrder() {
-    console.log('new order')
     this.newOrder = true;
     this.orderConfirmed = false;
     this.deleted = false;
-
   }
   
 
