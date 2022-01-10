@@ -19,7 +19,7 @@ export class LoginScreenComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  onSubmit() {
+  login() {
     const details = this.loginInfo.value;
     this.loginError = false;
     this.http.authorize(details.username, details.password).subscribe({

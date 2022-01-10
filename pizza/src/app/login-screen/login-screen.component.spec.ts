@@ -36,7 +36,7 @@ describe('LoginScreenComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  describe('onSubmit', () => {
+  describe('login', () => {
     it('should call loginSuccess on 200 response', ()=> {
       const mockResponse: AuthResponse = {
         access_token: 'valid'
@@ -47,7 +47,7 @@ describe('LoginScreenComponent', () => {
         username: "user",
         password: "password"
       });
-      component.onSubmit();
+      component.login();
       expect(loginSuccessSpy).toHaveBeenCalledOnceWith(mockResponse);
     });
 
@@ -69,20 +69,43 @@ describe('LoginScreenComponent', () => {
         username: "user",
         password: "password"
       });
-      component.onSubmit();
+      component.login();
       expect(loginFailureSpy).toHaveBeenCalledOnceWith();
     });
   });
 
   describe('loginSuccess', () => {
+    const authResponse: AuthResponse = {
+      access_token: 'access granted'
+    };
     it('should set loginError to false', () => {
-
+      
+      component.loginSuccess(authResponse);
+      expect(component.loginError).toBeFalse();
     });
     it('should set the auth token in the http service', () => { 
-
+      const authSpy = spyOn(mockPizzaService, 'setAuthToken');
+      component.loginSuccess(authResponse);
+      expect(authSpy).toHaveBeenCalledOnceWith(authResponse.access_token);
     });
     it('should emit true for logged in', () => {
+      const outputSpy = spyOn(component.isLoggedIn, 'emit');
+      component.loginSuccess(authResponse);
+      expect(outputSpy).toHaveBeenCalledOnceWith(true);
 
     });
-  })
+  });
+
+  describe('loginFailure', () => {
+    it('should set loginError to true', () => {
+      component.loginFailure();
+      expect(component.loginError).toBeTrue();
+    });
+    it('should reset the form', () => { 
+      const loginInfoSpy = spyOn( component.loginInfo, 'reset');
+      component.loginFailure();
+      expect(loginInfoSpy).toHaveBeenCalled();
+      expect(component.loginInfo.value).toEqual({ username: '', password: '' });
+    });
+  });
 });

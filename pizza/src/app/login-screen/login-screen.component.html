@@ -2,7 +2,7 @@
     <h1>Welcome to the pizza ordering app 🍕</h1>
     <p>Please login to continue.</p>
 
-<form class="user-info" [formGroup]="loginInfo" (submit)="onSubmit()">
+<form class="user-info" [formGroup]="loginInfo" (submit)="login()">
     <div>
     <label for="username">Username: </label>
     <input id="username" type="text" formControlName="username" placeholder="Username" matInput required>
