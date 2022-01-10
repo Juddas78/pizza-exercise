@@ -4,8 +4,8 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { NewOrderComponent } from './new-order.component';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { PizzaOrderService } from '../services/pizza-order.service';
-import { HttpClient } from '@angular/common/http';
-import { of } from 'rxjs';
+import { HttpClient, HttpErrorResponse, HttpEventType, HttpHeaders } from '@angular/common/http';
+import { of, throwError } from 'rxjs';
 
 describe('NewOrderComponent', () => {
   let component: NewOrderComponent;
@@ -53,16 +53,42 @@ describe('NewOrderComponent', () => {
         "Timestamp": "now"
       }));;
       component.placeOrder();
-
       expect(spy).toHaveBeenCalledOnceWith('normal', 'pepperoni', 'L', 1);
     });
 
-    // it('calls orderFailure in case of error response', () => {
-    //   spyOn(mockPizzaService, 'placeOrder').and.('error in response');
-    //   component.placeOrder();
-    //   expect(component.orderFailure).toHaveBeenCalled();
+    it('should call orderFailure on error response', ()=> {
+      const mockResponse: HttpErrorResponse = {
+        name: 'HttpErrorResponse',
+        message: 'generic error response',
+        error: undefined,
+        ok: false,
+        headers: new HttpHeaders,
+        status: 500,
+        statusText: '',
+        url: null,
+        type: HttpEventType.ResponseHeader
+      };
+      const ordersFailureSpy = spyOn(component, 'orderFailure');
+      spyOn(mockPizzaService, 'placeOrder').and.returnValue(throwError(() => mockResponse));    
+      component.placeOrder();
+      expect(ordersFailureSpy).toHaveBeenCalledOnceWith();
+    });
+  });
 
+  describe('orderFailure',() => {
+    it('emits true for error', () => {
+      const orderSpy = spyOn(component.orderError, 'emit');
+      component.orderFailure();
+      expect(orderSpy).toHaveBeenCalledOnceWith(true);
+    });
+  });
 
-    // })
-  })
+  describe('addTopping',() => {
+    it('adds a topping to the array', () => {
+      component.selectedToppings = ['cheese']
+      component.addTopping('pepperoni');
+      expect(component.selectedToppings).toEqual(['cheese', 'pepperoni']);
+    });
+  });
+
 });

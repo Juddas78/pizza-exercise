@@ -28,13 +28,12 @@ export class NewOrderComponent implements OnInit {
     let details = this.orderInfo.value;
     this.http.placeOrder(details.crust, this.selectedToppings.toString(), details.size, details.table).subscribe({
       next: () =>  this.orderSuccess(),
-      error: (err: HttpErrorResponse) =>  this.orderFailure(err)
+      error: () =>  this.orderFailure()
     })
   }
 
-  orderFailure(err: HttpErrorResponse): void {
-    this.orderPlaced.emit(true);
-
+  orderFailure(): void {
+    this.orderError.emit(true);
   }
   orderSuccess() {
     this.orderPlaced.emit(true);
@@ -42,7 +41,6 @@ export class NewOrderComponent implements OnInit {
 
   addTopping(topping: any) {
     this.selectedToppings.push(topping);
-    console.log('added topping', topping, this.selectedToppings.toString());
   }
 
   orderInfo = new FormGroup({
